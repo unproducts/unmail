@@ -1,13 +1,7 @@
-export const DRIVER_NAME = 'mailersend';
-
 import { Attachment, EmailParams, MailerSend, Recipient, Sender } from 'mailersend';
 
 import { SendMailOptions, SendMailResponse } from '../types';
-import { makeValidationErrorComposer, makeProcessingErrorComposer } from './utils/error';
 import { UnmailDriver } from '../abstract';
-
-const composeValidationError = makeValidationErrorComposer(DRIVER_NAME);
-const composeProcessingError = makeProcessingErrorComposer(DRIVER_NAME);
 
 export type MailerSendDriverOptions = { auth: string };
 
@@ -15,7 +9,7 @@ export default class MailerSendDriver extends UnmailDriver<MailerSendDriverOptio
   private mailerSend: MailerSend | undefined;
 
   constructor(options: MailerSendDriverOptions) {
-    super(options);
+    super(options, 'mailersend');
   }
 
   async init(): Promise<void> {
@@ -24,9 +18,9 @@ export default class MailerSendDriver extends UnmailDriver<MailerSendDriverOptio
     });
   }
 
-  async sendMail(options: SendMailOptions): Promise<SendMailResponse<any>> {
+  async sendMail0(options: SendMailOptions): Promise<SendMailResponse<any>> {
     if (!this.mailerSend) {
-      throw composeProcessingError('mailer send instance unavailable');
+      throw this.composeProcessingError('mailer send instance unavailable');
     }
     this.validateOptions(options);
 
@@ -72,7 +66,7 @@ export default class MailerSendDriver extends UnmailDriver<MailerSendDriverOptio
         emailOptions.setText(options.text as string);
         break;
       default:
-        composeProcessingError('Invalid content type detected');
+        this.composeProcessingError('Invalid content type detected');
         break;
     }
 
@@ -92,42 +86,6 @@ export default class MailerSendDriver extends UnmailDriver<MailerSendDriverOptio
         error: e,
         message: e.message,
       };
-    }
-  }
-
-  private validateOptions(options: SendMailOptions) {
-    if (!options.from) {
-      throw composeValidationError("'from' required");
-    }
-
-    if (!options.to || !Array.isArray(options.to) || options.to.length == 0) {
-      throw composeValidationError("'to' required and cannot be empty");
-    }
-
-    if (!options.templateId) {
-      if (!options.subject) {
-        throw composeValidationError("'subject' is required if template not being used");
-      }
-      if (!options.html && !options.text) {
-        throw composeValidationError("either 'text' or 'html' is required if template not being used");
-      }
-    }
-
-    if (options.attachments && Array.isArray(options.attachments) && options.attachments.length > 0) {
-      options.attachments.forEach((a, i) => {
-        if (!a.disposition) {
-          throw composeValidationError("'disposition' missing from attachment[" + i + ']');
-        }
-        if (a.disposition != 'inline' && a.disposition != 'attachment') {
-          throw composeValidationError("'disposition' can only be 'attachment' or 'inline'");
-        }
-        if (a.disposition === 'inline' && !a.cid) {
-          throw composeValidationError("'cid' is mandatory to send attachments 'inline'");
-        }
-        if (!Buffer.isBuffer(a.content) && typeof a.content != 'string') {
-          throw composeValidationError("'content' can only be either buffer or string. attachment[" + i + ']');
-        }
-      });
     }
   }
 }
