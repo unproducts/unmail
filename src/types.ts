@@ -32,6 +32,6 @@ export type SendMailOptions = {
 export type SendMailResponse<E extends Error = Error> = {
   success: boolean;
   code: number;
-  error: E;
+  error?: E;
   message?: string;
 };
