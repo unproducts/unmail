@@ -22,7 +22,7 @@ const MAILER_SEND_DOMAIN = process.env.MAILERSEND_DOMAIN!;
     from: { email: `test-unmail@${MAILER_SEND_DOMAIN}` },
     subject: 'This is test email',
     to: [{ email: TEST_TARGET_EMAIL }],
-    html: '<b>This is test email</b>',
+    text: 'This is test email',
   });
 
   const r2 = mailer.sendMail({
