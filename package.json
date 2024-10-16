@@ -45,7 +45,8 @@
     "vitest": "^2.0.5"
   },
   "peerDependencies": {
-    "mailersend": "^2.3.0"
+    "mailersend": "^2.3.0",
+    "resend": "^4.0.0"
   },
   "packageManager": "yarn@9.7.0"
 }
