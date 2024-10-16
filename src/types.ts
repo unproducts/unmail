@@ -9,10 +9,14 @@ export type Attachment = {
   filename: string;
   disposition: 'inline' | 'attachment';
   cid?: string;
+  hostedPath?: string;
 };
 
 export type Sender = Identity;
 export type Recipients = Identity[];
+
+export type Tag = { name: string; value: string };
+export type Tags = Tag[];
 
 export type SendMailOptions = {
   from: Sender;
@@ -27,6 +31,7 @@ export type SendMailOptions = {
   headers?: Record<string, string>;
   templateId?: string;
   templateData?: { email: string; data: Record<string, any> }[];
+  tags?: Tags;
 };
 
 export type SendMailResponse<E extends Error = Error> = {
