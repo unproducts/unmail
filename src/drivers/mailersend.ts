@@ -2,6 +2,7 @@ import { Attachment, EmailParams, MailerSend, Recipient, Sender } from 'mailerse
 
 import { SendMailOptions, SendMailResponse } from '../types';
 import { UnmailDriver } from '../abstract';
+import { hasHostedAttachments } from '../utils';
 
 export type MailerSendDriverOptions = { auth: string };
 
@@ -20,9 +21,12 @@ export default class MailerSendDriver extends UnmailDriver<MailerSendDriverOptio
 
   async sendMail0(options: SendMailOptions): Promise<SendMailResponse<any>> {
     if (!this.mailerSend) {
-      throw this.composeProcessingError('mailer send instance unavailable');
+      throw this.composeProcessingError('mailersend instance unavailable');
     }
-    this.validateOptions(options);
+
+    if (hasHostedAttachments(options.attachments)) {
+      throw this.composeProcessingError('mailersend doesnt allow hosted attachments');
+    }
 
     const from = new Sender(options.from.email, options.from.name);
     const to: Recipient[] = options.to.map((t) => new Recipient(t.email, t.name));
@@ -31,6 +35,10 @@ export default class MailerSendDriver extends UnmailDriver<MailerSendDriverOptio
     const bcc: Recipient[] = options.bcc ? options.bcc.map((t) => new Recipient(t.email, t.name)) : [];
     const subject = options.subject;
     const contentType: 'html' | 'text' | 'template' = options.templateId ? 'template' : options.html ? 'html' : 'text';
+
+    const headers: { name: string; value: string }[] = options.headers
+      ? Object.keys(options.headers).map((k) => ({ name: k, value: (options.headers as any)[k] }))
+      : [];
 
     const attachments = options.attachments
       ? options.attachments.map((a) => {
@@ -51,6 +59,9 @@ export default class MailerSendDriver extends UnmailDriver<MailerSendDriverOptio
     }
     if (attachments) {
       emailOptions.setAttachments(attachments);
+    }
+    if (headers) {
+      emailOptions.setHeaders(headers);
     }
 
     switch (contentType) {
