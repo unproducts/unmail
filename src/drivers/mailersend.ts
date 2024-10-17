@@ -1,6 +1,6 @@
 import { Attachment, EmailParams, MailerSend, Recipient, Sender } from 'mailersend';
 
-import { SendMailOptions, SendMailResponse } from '../types';
+import { SendMailOptions, SendMailResponse } from './internal/types';
 import { UnmailDriver } from './internal/abstract';
 import { hasHostedAttachments } from './internal/utils';
 

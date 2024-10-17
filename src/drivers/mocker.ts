@@ -1,5 +1,5 @@
 import { UnmailDriver } from './internal/abstract';
-import { SendMailOptions, SendMailResponse } from '../types';
+import { SendMailOptions, SendMailResponse } from './internal/types';
 
 export type MockerOptions = {
   mode?: 'success' | 'failure';

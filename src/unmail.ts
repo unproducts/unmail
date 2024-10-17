@@ -1,5 +1,5 @@
 import { UnmailDriver } from './drivers/internal/abstract';
-import { SendMailOptions, SendMailResponse } from './types';
+import { SendMailOptions, SendMailResponse } from './drivers/internal/types';
 
 export class Unmail<DriverOptions = any, SendError extends Error = Error> {
   private readonly driver: UnmailDriver<DriverOptions, SendError>;
