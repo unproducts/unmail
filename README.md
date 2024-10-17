@@ -1,3 +1,5 @@
+<img src="/docs/unmail-cover.png"/>
+
 # @unproducts/unmail
 
 <!-- automd:badges color=yellow -->
@@ -8,6 +10,14 @@
 <!-- /automd -->
 
 Unified email API for sending transactional emails across 10+ providers. You can write your own drivers too.
+<br/><br/>
+✅ **Built-in drivers for major providers.**<br/>
+✅ **Shipped with built in server for microservice requirements.**<br/>
+✅ **Built in testing drivers to mock mail sending in unit tests and local development.**<br/>
+✅ **Comprehensive support for writing custom drivers.**<br/>
+✅ **Support for raw SMTP (via Node Mailer)**<br/>
+
+<img src="/docs/unmail-info.png" width="600"/>
 
 ## Usage
 
@@ -36,21 +46,17 @@ bun install @unproducts/unmail
 
 Import:
 
-<!-- automd:jsimport cjs cdn name="pkg" -->
-
 **ESM** (Node.js, Bun)
 
 ```js
-import {} from "pkg";
+import { createUnmail } from "@unproducts/unmail";
 ```
 
 **CommonJS** (Legacy Node.js)
 
 ```js
-const {} = require("pkg");
+const { createUnmail } = require("@unproducts/unmail");
 ```
-
-<!-- /automd -->
 
 ## Development
 
@@ -60,7 +66,6 @@ const {} = require("pkg");
 
 - Clone this repository
 - Install latest LTS version of [Node.js](https://nodejs.org/en/)
-- Enable [Corepack](https://github.com/nodejs/corepack) using `corepack enable`
 - Install dependencies using `yarn install`
 - Run interactive tests using `yarn dev`
 
