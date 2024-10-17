@@ -7,6 +7,16 @@
   "sideEffects": false,
   "type": "module",
   "exports": {
+    "./drivers/*": {
+      "types": "./drivers/*.d.ts",
+      "import": "./drivers/*.mjs",
+      "require": "./drivers/*.cjs"
+    },
+    "./drivers/internal/*": {
+      "types": "./drivers/internal/*.d.ts",
+      "import": "./drivers/internal/*.mjs",
+      "require": "./drivers/internal/*.cjs"
+    },
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
@@ -17,7 +27,8 @@
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "drivers"
   ],
   "scripts": {
     "build": "unbuild",
@@ -26,9 +37,7 @@
     "lint:fix": "automd && eslint . --fix && prettier -w .",
     "prepack": "yarn build",
     "play": "jiti playground",
-    "release": "yarn test && changelogen --release && npm publish && git push --follow-tags",
-    "test": "yarn lint && yarn test:types && vitest run --coverage",
-    "test:types": "tsc --noEmit --skipLibCheck"
+    "release": "changelogen --release && npm publish && git push --follow-tags"
   },
   "devDependencies": {
     "@types/node": "^22.1.0",
