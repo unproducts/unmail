@@ -1,8 +1,8 @@
 import { Resend } from 'resend';
 
-import { UnmailDriver } from '../abstract';
+import { UnmailDriver } from './internal/abstract';
 import { SendMailOptions, SendMailResponse } from '../types';
-import { hasInlineAttachments, mailStringFromIdentity } from '../utils';
+import { hasInlineAttachments, mailStringFromIdentity } from './internal/utils';
 
 export type ResendDriverOptions = { apiKey: string; externaliseInlineAttachments?: boolean };
 

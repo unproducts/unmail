@@ -1,4 +1,4 @@
-import { UnmailDriver } from '../abstract';
+import { UnmailDriver } from './internal/abstract';
 import { SendMailOptions, SendMailResponse } from '../types';
 
 export type MockerOptions = {

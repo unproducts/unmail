@@ -1,8 +1,8 @@
 import { Attachment, EmailParams, MailerSend, Recipient, Sender } from 'mailersend';
 
 import { SendMailOptions, SendMailResponse } from '../types';
-import { UnmailDriver } from '../abstract';
-import { hasHostedAttachments } from '../utils';
+import { UnmailDriver } from './internal/abstract';
+import { hasHostedAttachments } from './internal/utils';
 
 export type MailerSendDriverOptions = { auth: string };
 

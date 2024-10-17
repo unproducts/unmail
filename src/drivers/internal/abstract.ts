@@ -1,5 +1,5 @@
 import { makeProcessingErrorComposer, makeValidationErrorComposer } from './error';
-import { SendMailOptions, SendMailResponse } from './types';
+import { SendMailOptions, SendMailResponse } from '../../types';
 
 export abstract class UnmailDriver<DriverOptions = any, E extends Error = Error> {
   protected readonly DRIVER_NAME: string;

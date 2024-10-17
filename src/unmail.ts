@@ -1,4 +1,4 @@
-import { UnmailDriver } from './abstract';
+import { UnmailDriver } from './drivers/internal/abstract';
 import { SendMailOptions, SendMailResponse } from './types';
 
 export class Unmail<DriverOptions = any, SendError extends Error = Error> {
