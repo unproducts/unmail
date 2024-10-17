@@ -1,4 +1,4 @@
-import { Attachment, Identity } from '../../types';
+import { Attachment, Identity } from './types';
 
 export const mailStringFromIdentity = (identity: Identity) => {
   if (identity.name) {
