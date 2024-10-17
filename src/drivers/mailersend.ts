@@ -42,12 +42,9 @@ export default class MailerSendDriver extends UnmailDriver<MailerSendDriverOptio
 
     const attachments = options.attachments
       ? options.attachments.map((a) => {
-          let content: string;
-          if (Buffer.isBuffer(a.content)) {
-            content = a.content.toString('base64');
-          } else {
-            content = Buffer.from(a.content).toString('base64');
-          }
+          const content = Buffer.isBuffer(a.content)
+            ? a.content.toString('base64')
+            : Buffer.from(a.content).toString('base64');
           return new Attachment(content, a.filename, a.disposition, a.cid);
         })
       : [];
@@ -65,20 +62,24 @@ export default class MailerSendDriver extends UnmailDriver<MailerSendDriverOptio
     }
 
     switch (contentType) {
-      case 'html':
+      case 'html': {
         emailOptions.setHtml(options.html as string);
         break;
-      case 'template':
+      }
+      case 'template': {
         emailOptions.setTemplateId(options.templateId as string);
         const personalisations = options.templateData || [];
         emailOptions.setPersonalization(personalisations);
         break;
-      case 'text':
+      }
+      case 'text': {
         emailOptions.setText(options.text as string);
         break;
-      default:
+      }
+      default: {
         this.composeProcessingError('Invalid content type detected');
         break;
+      }
     }
 
     try {

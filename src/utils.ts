@@ -8,7 +8,7 @@ export const mailStringFromIdentity = (identity: Identity) => {
 };
 
 export const hasInlineAttachments = (attachments?: Attachment[]) =>
-  attachments && attachments.filter((a) => a.disposition === 'inline').length !== 0;
+  attachments && attachments.some((a) => a.disposition === 'inline');
 
 export const hasHostedAttachments = (attachments?: Attachment[]) =>
-  attachments && attachments.filter((a) => !!a.hostedPath).length !== 0;
+  attachments && attachments.some((a) => !!a.hostedPath);

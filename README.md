@@ -5,7 +5,7 @@
 <!-- automd:badges color=yellow -->
 
 [![npm version](https://img.shields.io/npm/v/@unproducts/unmail?color=yellow)](https://npmjs.com/package/@unproducts/unmail)
-[![npm downloads](https://img.shields.io/npm/dm/@unproducts/unmail?color=yellow)](https://npmjs.com/package/@unproducts/unmail)
+[![npm downloads](https://img.shields.io/npm/dm/@unproducts/unmail?color=yellow)](https://npm.chart.dev/@unproducts/unmail)
 
 <!-- /automd -->
 
@@ -40,6 +40,9 @@ pnpm install @unproducts/unmail
 
 # bun
 bun install @unproducts/unmail
+
+# deno
+deno install @unproducts/unmail
 ```
 
 <!-- /automd -->
@@ -49,13 +52,13 @@ Import:
 **ESM** (Node.js, Bun)
 
 ```js
-import { createUnmail } from "@unproducts/unmail";
+import { createUnmail } from '@unproducts/unmail';
 ```
 
 **CommonJS** (Legacy Node.js)
 
 ```js
-const { createUnmail } = require("@unproducts/unmail");
+const { createUnmail } = require('@unproducts/unmail');
 ```
 
 ## Development
@@ -75,11 +78,11 @@ const { createUnmail } = require("@unproducts/unmail");
 
 <!-- automd:contributors license=MIT -->
 
-Published under the [MIT](https://github.com/unjs/@unproducts/unmail/blob/main/LICENSE) license.
-Made by [community](https://github.com/unjs/@unproducts/unmail/graphs/contributors) 💛
+Published under the [MIT](https://github.com/unproducts/unmail/blob/main/LICENSE) license.
+Made by [community](https://github.com/unproducts/unmail/graphs/contributors) 💛
 <br><br>
-<a href="https://github.com/unjs/@unproducts/unmail/graphs/contributors">
-<img src="https://contrib.rocks/image?repo=unjs/@unproducts/unmail" />
+<a href="https://github.com/unproducts/unmail/graphs/contributors">
+<img src="https://contrib.rocks/image?repo=unproducts/unmail" />
 </a>
 
 <!-- /automd -->

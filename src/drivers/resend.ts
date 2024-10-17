@@ -52,11 +52,7 @@ export default class ResendDriver extends UnmailDriver<ResendDriverOptions> {
       if (a.hostedPath) {
         path = a.hostedPath;
       } else {
-        if (Buffer.isBuffer(a.content)) {
-          content = a.content.toString('base64');
-        } else {
-          content = Buffer.from(a.content).toString('base64');
-        }
+        content = Buffer.isBuffer(a.content) ? a.content.toString('base64') : Buffer.from(a.content).toString('base64');
       }
       return {
         content,

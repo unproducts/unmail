@@ -33,7 +33,7 @@ export abstract class UnmailDriver<DriverOptions = any, E extends Error = Error>
       throw this.composeValidationError("'from' required");
     }
 
-    if (!options.to || !Array.isArray(options.to) || options.to.length == 0) {
+    if (!options.to || !Array.isArray(options.to) || options.to.length === 0) {
       throw this.composeValidationError("'to' required and cannot be empty");
     }
 
@@ -47,7 +47,7 @@ export abstract class UnmailDriver<DriverOptions = any, E extends Error = Error>
     }
 
     if (options.attachments && Array.isArray(options.attachments) && options.attachments.length > 0) {
-      options.attachments.forEach((a, i) => {
+      for (const [i, a] of options.attachments.entries()) {
         if (!a.disposition) {
           throw this.composeValidationError("'disposition' missing from attachment[" + i + ']');
         }
@@ -60,7 +60,7 @@ export abstract class UnmailDriver<DriverOptions = any, E extends Error = Error>
         if (!Buffer.isBuffer(a.content) && typeof a.content != 'string') {
           throw this.composeValidationError("'content' can only be either buffer or string. attachment[" + i + ']');
         }
-      });
+      }
     }
   }
 }
