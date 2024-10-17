@@ -57,5 +57,8 @@
     "mailersend": "^2.3.0",
     "resend": "^4.0.0"
   },
-  "packageManager": "yarn@9.7.0"
+  "packageManager": "yarn@9.7.0",
+  "publishConfig": {
+    "access": "public"
+  }
 }
