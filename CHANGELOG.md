@@ -1,6 +1,20 @@
 # Changelog
 
 
+## v0.0.2
+
+[compare changes](https://github.com/unproducts/unmail/compare/v0.0.1...v0.0.2)
+
+### 🏡 Chore
+
+- **release:** V0.0.1 ([8bf3693](https://github.com/unproducts/unmail/commit/8bf3693))
+- **npm:** Fix publish config ([d43828d](https://github.com/unproducts/unmail/commit/d43828d))
+- **git:** Fix gitignore and types path ([6610a9a](https://github.com/unproducts/unmail/commit/6610a9a))
+
+### ❤️ Contributors
+
+- Amandesai01 <amandesai01@gmail.com>
+
 ## v0.0.1
 
 
