@@ -22,7 +22,7 @@ if (!TEST_TARGET_EMAIL) {
 }
 
 const driver = new PostmarkDriver({
-  serverToken: SERVER_TOKEN,
+  token: SERVER_TOKEN,
 });
 
 const mailer = await createUnmail({

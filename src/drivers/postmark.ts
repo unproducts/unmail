@@ -5,7 +5,7 @@ import { UnmailDriver } from './internal/abstract';
 import { mailStringFromIdentity } from './internal/utils';
 
 export type PostmarkDriverOptions = {
-  serverToken: string;
+  token: string;
 };
 
 export default class PostmarkDriver extends UnmailDriver<PostmarkDriverOptions, AxiosError> {
@@ -18,7 +18,7 @@ export default class PostmarkDriver extends UnmailDriver<PostmarkDriverOptions, 
     this.apiClient = axios.create({
       baseURL: 'https://api.postmarkapp.com',
       headers: {
-        'X-Postmark-Server-Token': this.options.serverToken,
+        'X-Postmark-Server-Token': this.options.token,
         'Content-Type': 'application/json',
         'Accept': 'application/json',
       }
