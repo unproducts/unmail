@@ -1,3 +1,5 @@
+import { AxiosError } from "axios";
+
 export type Identity = {
   email: string;
   name?: string;
@@ -34,9 +36,10 @@ export type SendMailOptions = {
   tags?: Tags;
 };
 
-export type SendMailResponse<E extends Error = Error> = {
+export type SendMailResponse<E extends Error = AxiosError> = {
   success: boolean;
   code: number;
   error?: E;
   message?: string;
+  payload?: any;
 };
