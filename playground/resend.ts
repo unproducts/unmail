@@ -9,8 +9,20 @@ const TEST_TARGET_EMAIL = process.env.TEST_TARGET_EMAIL!;
 const KEY = process.env.RESEND_TOKEN!;
 const DOMAIN = process.env.RESEND_DOMAIN!;
 
+if (!KEY) {
+  throw new Error('RESEND_TOKEN is not set');
+}
+
+if (!DOMAIN) {
+  throw new Error('RESEND_DOMAIN is not set');
+}
+
+if (!TEST_TARGET_EMAIL) {
+  throw new Error('TEST_TARGET_EMAIL is not set');
+}
+
 const driver = new ResendDriver({
-  apiKey: KEY,
+  token: KEY,
   externaliseInlineAttachments: true,
 });
 

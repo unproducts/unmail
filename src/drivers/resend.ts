@@ -1,28 +1,30 @@
-import { Resend } from 'resend';
+import axios, { AxiosInstance, AxiosError } from 'axios';
 
 import { UnmailDriver } from './internal/abstract';
 import { SendMailOptions, SendMailResponse } from './internal/types';
 import { hasInlineAttachments, mailStringFromIdentity } from './internal/utils';
 
-export type ResendDriverOptions = { apiKey: string; externaliseInlineAttachments?: boolean };
+export type ResendDriverOptions = {
+  token: string;
+  externaliseInlineAttachments?: boolean;
+};
 
-export default class ResendDriver extends UnmailDriver<ResendDriverOptions> {
-  private resendInstance: Resend | undefined;
-
+export default class ResendDriver extends UnmailDriver<ResendDriverOptions, AxiosError> {
   constructor(options: ResendDriverOptions) {
     super(options, 'resend');
   }
 
-  init(): Promise<void> {
-    this.resendInstance = new Resend(this.options.apiKey);
-    return Promise.resolve();
+  async init(): Promise<void> {
+    this.apiClient = axios.create({
+      baseURL: 'https://api.resend.com',
+      headers: {
+        Authorization: `Bearer ${this.options.token}`,
+        'Content-Type': 'application/json',
+      },
+    });
   }
 
-  protected async sendMail0(options: SendMailOptions): Promise<SendMailResponse<ResendError>> {
-    if (!this.resendInstance) {
-      throw this.composeProcessingError('resend instance unavailable');
-    }
-
+  protected async sendMail0(options: SendMailOptions): Promise<SendMailResponse<AxiosError>> {
     if (!(options.text || options.html) && options.templateId) {
       throw this.composeProcessingError('resend doesnt support templates yet');
     }
@@ -35,114 +37,103 @@ export default class ResendDriver extends UnmailDriver<ResendDriverOptions> {
 
     const from = mailStringFromIdentity(options.from);
 
-    console.log(from);
+    // Prepare the payload for Resend API
+    let payload: any = {
+      from,
+      to: options.to.map(mailStringFromIdentity),
+      subject: options.subject as string,
+    };
 
-    const to = options.to.map((v) => v.email);
-    const subject = options.subject as string;
-    const cc = options.cc?.map((cc) => cc.email);
-    const bcc = options.bcc?.map((bcc) => bcc.email);
-    const replyTo = options.replyTo?.email;
-    const contentType: 'html' | 'text' = options.html ? 'html' : 'text';
-    const content: string = (contentType === 'html' ? options.html : options.text) as string;
-    const tags = options.tags;
+    if (options.cc && options.cc.length > 0) {
+      payload.cc = options.cc.map(mailStringFromIdentity);
+    }
 
-    const attachments: ResendAttachment[] | undefined = options.attachments?.map((a) => {
-      let content: string | undefined = undefined;
-      let path: string | undefined = undefined;
-      if (a.hostedPath) {
-        path = a.hostedPath;
-      } else {
-        content = Buffer.isBuffer(a.content) ? a.content.toString('base64') : Buffer.from(a.content).toString('base64');
-      }
-      return {
-        content,
-        contentType: a.contentType,
-        path,
-        filename: a.filename,
-      };
-    });
+    if (options.bcc && options.bcc.length > 0) {
+      payload.bcc = options.bcc.map(mailStringFromIdentity);
+    }
+
+    if (options.replyTo) {
+      payload.reply_to = mailStringFromIdentity(options.replyTo);
+    }
+
+    if (options.html) {
+      payload.html = options.html;
+    } else if (options.text) {
+      payload.text = options.text;
+    }
+
+    if (options.tags) {
+      payload.tags = options.tags;
+    }
+
+    if (options.headers) {
+      payload.headers = options.headers;
+    }
+
+    if (options.attachments && options.attachments.length > 0) {
+      payload.attachments = options.attachments.map((a) => {
+        const attachment: any = {
+          filename: a.filename,
+        };
+
+        if (a.hostedPath) {
+          attachment.path = a.hostedPath;
+        } else {
+          attachment.content = Buffer.isBuffer(a.content)
+            ? a.content.toString('base64')
+            : Buffer.from(a.content).toString('base64');
+        }
+
+        if (a.contentType) {
+          attachment.contentType = a.contentType;
+        }
+
+        return attachment;
+      });
+    }
+
+    if (this.modifyApiPayload) {
+      payload = this.modifyApiPayload(payload);
+    }
 
     try {
-      const response = await this.resendInstance.emails.send({
-        from,
-        to,
-        subject,
-        cc,
-        bcc,
-        replyTo,
-        [contentType]: content,
-        tags,
-        attachments,
-        // TODO: investigate and support.
-        react: undefined,
-      });
-      if (response.data) {
+      const apiResponse = await this.apiClient.post('/emails', payload);
+
+      if (apiResponse.data && apiResponse.data.id) {
         return {
-          success: !!response.data?.id,
-          code: 201,
+          success: true,
+          code: apiResponse.status,
           error: undefined,
-          message: undefined,
-        };
-      } else if (response.error) {
-        return {
-          success: false,
-          code: RESEND_ERROR_CODES_BY_KEY[response.error.name],
-          message: response.error.message,
-          error: new ResendError(response.error.message, response.error.name),
+          message: apiResponse.data.id,
         };
       } else {
-        throw new Error(
-          'Invalid state. Both data and error are missing. This is likely a bug from unmail. Feel free to report the issue.'
-        );
+        return {
+          success: false,
+          code: apiResponse.status,
+          message: 'No ID returned from Resend API',
+          error: undefined,
+        };
       }
     } catch (error) {
-      const e = error as Error;
-      return {
-        success: false,
-        code: 500,
-        message: e.message,
-        error: new ResendError('Application Error', 'application_error'),
-      };
+      const e = error as AxiosError;
+      if (e.response?.data) {
+        const errorData = e.response.data as any;
+        const errorMessage = errorData.message || e.message;
+
+        return {
+          success: false,
+          code: e.response.status || 500,
+          message: errorMessage,
+          error: e,
+        };
+      } else {
+        return {
+          success: false,
+          code: 500,
+          message: e.message,
+          error: e,
+        };
+      }
     }
   }
 }
-
-type ResendAttachment = {
-  /** Content of an attached file. */
-  content?: string | Buffer;
-  /** Name of attached file. */
-  filename?: string | false | undefined;
-  /** Path where the attachment file is hosted */
-  path?: string;
-  /** Optional content type for the attachment, if not set will be derived from the filename property */
-  contentType?: string;
-};
-
-// https://github.com/resend/resend-node/blob/canary/src/error.ts
-class ResendError extends Error {
-  public readonly name: RESEND_ERROR_CODE_KEY;
-
-  public constructor(message: string, name: RESEND_ERROR_CODE_KEY) {
-    super();
-    this.message = message;
-    this.name = name;
-  }
-}
-
-export const RESEND_ERROR_CODES_BY_KEY = {
-  missing_required_field: 422,
-  invalid_access: 422,
-  invalid_parameter: 422,
-  invalid_region: 422,
-  rate_limit_exceeded: 429,
-  missing_api_key: 401,
-  invalid_api_Key: 403,
-  invalid_from_address: 403,
-  validation_error: 403,
-  not_found: 404,
-  method_not_allowed: 405,
-  application_error: 500,
-  internal_server_error: 500,
-} as const;
-
-export type RESEND_ERROR_CODE_KEY = keyof typeof RESEND_ERROR_CODES_BY_KEY;
