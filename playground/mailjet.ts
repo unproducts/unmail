@@ -27,7 +27,7 @@ if (!TEST_TARGET_EMAIL) {
 }
 
 const driver = new MailjetDriver({
-  apiKey: API_KEY,
+  token: API_KEY,
   secretKey: SECRET_KEY,
 });
 

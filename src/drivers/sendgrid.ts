@@ -4,7 +4,7 @@ import { SendMailOptions, SendMailResponse } from './internal/types';
 import { UnmailDriver } from './internal/abstract';
 
 export type SendGridDriverOptions = {
-  apiKey: string;
+  token: string;
 };
 
 export default class SendGridDriver extends UnmailDriver<SendGridDriverOptions, AxiosError> {
@@ -17,7 +17,7 @@ export default class SendGridDriver extends UnmailDriver<SendGridDriverOptions, 
     this.apiClient = axios.create({
       baseURL: 'https://api.sendgrid.com',
       headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
+        'Authorization': `Bearer ${this.options.token}`,
         'Content-Type': 'application/json',
       }
     });

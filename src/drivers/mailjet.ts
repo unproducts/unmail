@@ -5,7 +5,7 @@ import { UnmailDriver } from './internal/abstract';
 import { hasHostedAttachments } from './internal/utils';
 
 export type MailjetDriverOptions = {
-  apiKey: string;
+  token: string;
   secretKey: string;
 };
 
@@ -16,7 +16,7 @@ export default class MailjetDriver extends UnmailDriver<MailjetDriverOptions, Ax
   }
 
   async init(): Promise<void> {
-    const basicAuth = Buffer.from(`${this.options.apiKey}:${this.options.secretKey}`).toString('base64');
+    const basicAuth = Buffer.from(`${this.options.token}:${this.options.secretKey}`).toString('base64');
 
     this.apiClient = axios.create({
       baseURL: 'https://api.mailjet.com/v3.1',

@@ -22,7 +22,7 @@ if (!TEST_TARGET_EMAIL) {
 }
 
 const driver = new SendGridDriver({
-  apiKey: API_KEY,
+  token: API_KEY,
 });
 
 const mailer = await createUnmail({
