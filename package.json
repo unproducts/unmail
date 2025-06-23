@@ -1,6 +1,6 @@
 {
   "name": "@unproducts/unmail",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Unified email API for sending transactional emails across 10+ providers.",
   "repository": "unproducts/unmail",
   "license": "MIT",
