@@ -19,6 +19,19 @@ Unified email API for sending transactional emails across 10+ providers. You can
 
 <img src="/docs/unmail-info.png" width="600"/>
 
+## Supported Drivers Checklist
+
+| Name | Status |
+|------|----------------|
+| Mailchimp | ✅ |
+| Mailersend | ✅ |
+| Resend | ✅ |
+| Sendgrid | ✅ |
+| Mailjet | ✅ |
+| Postmark | ✅ |
+| Listmonk |  |
+| Sendinblue |  |
+
 ## Usage
 
 Install package:
