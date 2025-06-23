@@ -9,8 +9,20 @@ const TEST_TARGET_EMAIL = process.env.TEST_TARGET_EMAIL!;
 const KEY = process.env.MAILERSEND_TOKEN!;
 const DOMAIN = process.env.MAILERSEND_DOMAIN!;
 
+if (!KEY) {
+  throw new Error('MAILERSEND_TOKEN is not set');
+}
+
+if (!DOMAIN) {
+  throw new Error('MAILERSEND_DOMAIN is not set');
+}
+
+if (!TEST_TARGET_EMAIL) {
+  throw new Error('TEST_TARGET_EMAIL is not set');
+}
+
 const driver = new MailerSendDriver({
-  auth: KEY,
+  token: KEY,
 });
 
 const mailer = await createUnmail({

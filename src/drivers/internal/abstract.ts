@@ -1,4 +1,4 @@
-import { AxiosInstance, AxiosRequestConfig } from 'axios';
+import { AxiosInstance } from 'axios';
 import { makeProcessingErrorComposer, makeValidationErrorComposer } from './error';
 import { SendMailOptions, SendMailResponse } from './types';
 
@@ -7,7 +7,7 @@ export abstract class UnmailDriver<DriverOptions = any, E extends Error = Error>
 
   // @ts-expect-error - apiClient is initialized in the init method
   protected apiClient: AxiosInstance;
-  protected modifyApiRequest?: ((request: AxiosRequestConfig) => AxiosRequestConfig);
+  protected modifyApiPayload?: ((request: any) => any);
 
   readonly options: DriverOptions;
   protected readonly composeValidationError;
@@ -37,8 +37,8 @@ export abstract class UnmailDriver<DriverOptions = any, E extends Error = Error>
     return this.DRIVER_NAME;
   }
 
-  setRequestModifier(modifyApiRequest: (request: AxiosRequestConfig) => AxiosRequestConfig) {
-    this.modifyApiRequest = modifyApiRequest;
+  setPayloadModifier(modifyApiPayload: (request: any) => any) {
+    this.modifyApiPayload = modifyApiPayload;
   }
 
   protected validateOptions(options: SendMailOptions) {
