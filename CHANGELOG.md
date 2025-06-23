@@ -1,6 +1,35 @@
 # Changelog
 
 
+## v0.0.3
+
+[compare changes](https://github.com/unproducts/unmail/compare/v0.0.2...v0.0.3)
+
+### 🚀 Enhancements
+
+- **drivers:** Mailchimp driver ([b4357f7](https://github.com/unproducts/unmail/commit/b4357f7))
+- **drivers:** Mailjet ([b6f159a](https://github.com/unproducts/unmail/commit/b6f159a))
+- **drivers:** Postmark ([f9caf38](https://github.com/unproducts/unmail/commit/f9caf38))
+- **drivers:** Sendgrid ([4510f17](https://github.com/unproducts/unmail/commit/4510f17))
+
+### 🔥 Performance
+
+- **core:** Deprecate sdk usage and rely on api calls ([a179d13](https://github.com/unproducts/unmail/commit/a179d13))
+- **mailersend:** Make api call and decomission sdk ([576041d](https://github.com/unproducts/unmail/commit/576041d))
+- **resend:** Make api call and decomission sdk ([a356f83](https://github.com/unproducts/unmail/commit/a356f83))
+
+### 📖 Documentation
+
+- Readme update ([b5d4357](https://github.com/unproducts/unmail/commit/b5d4357))
+
+### 🏡 Chore
+
+- Remove peer deps ([4631e73](https://github.com/unproducts/unmail/commit/4631e73))
+
+### ❤️ Contributors
+
+- Amandesai01 <amandesai01@gmail.com>
+
 ## v0.0.2
 
 [compare changes](https://github.com/unproducts/unmail/compare/v0.0.1...v0.0.2)
