@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.6
+
+[compare changes](https://github.com/unproducts/unmail/compare/v0.0.5...v0.0.6)
+
+### 🏡 Chore
+
+- Type fixes ([002c714](https://github.com/unproducts/unmail/commit/002c714))
+
+### ❤️ Contributors
+
+- Amandesai01 <amandesai01@gmail.com>
+
 ## v0.0.5
 
 [compare changes](https://github.com/unproducts/unmail/compare/v0.0.4...v0.0.5)
