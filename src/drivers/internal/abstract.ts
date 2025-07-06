@@ -3,7 +3,7 @@ import { makeProcessingErrorComposer, makeValidationErrorComposer } from './erro
 import { SendMailOptions, SendMailResponse } from './types';
 
 export abstract class UnmailDriver<DriverOptions = any, E extends Error = Error> {
-  protected readonly DRIVER_NAME: string;
+  private readonly DRIVER_NAME: string;
 
   // @ts-expect-error - apiClient is initialized in the init method
   protected apiClient: AxiosInstance;

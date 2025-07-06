@@ -23,6 +23,8 @@ export type CreateUnmailOptions<DriverOptions = any, SendError extends Error = E
   driver: UnmailDriver<DriverOptions, SendError>;
 };
 
-export const createUnmail = async (options: CreateUnmailOptions) => {
+export const createUnmail = async <DriverOptions = any, SendError extends Error = Error>(
+  options: CreateUnmailOptions<DriverOptions, SendError>
+) => {
   return Unmail.make(options.driver);
 };
