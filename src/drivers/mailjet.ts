@@ -1,34 +1,35 @@
 import axios, { AxiosError } from 'axios';
 
-import { SendMailOptions, SendMailResponse } from './internal/types';
-import { UnmailDriver } from './internal/abstract';
-import { hasHostedAttachments } from './internal/utils';
+import { defineUnmailDriver } from './internal/abstract';
+import { SendMailOptions } from './internal/types';
+import { DEFAULT_PAYLOAD_MODIFIER, hasHostedAttachments, PayloadModifier } from './internal/utils';
+import { makeProcessingErrorComposer } from './internal/error';
 
 export type MailjetDriverOptions = {
   token: string;
   secretKey: string;
 };
 
-export default class MailjetDriver extends UnmailDriver<MailjetDriverOptions, AxiosError> {
-  constructor(options: MailjetDriverOptions) {
-    super(options, 'mailjet');
-  }
+export default defineUnmailDriver<MailjetDriverOptions>((driverOptions) => {
+  const composeProcessingError = makeProcessingErrorComposer('mailjet');
 
-  async init(): Promise<void> {
-    const basicAuth = Buffer.from(`${this.options.token}:${this.options.secretKey}`).toString('base64');
+  let modifyApiPayload = DEFAULT_PAYLOAD_MODIFIER;
+  const setPayloadModifier = (payloadModifier: PayloadModifier) => {
+    modifyApiPayload = payloadModifier;
+  };
 
-    this.apiClient = axios.create({
-      baseURL: 'https://api.mailjet.com/v3.1',
-      headers: {
-        Authorization: `Basic ${basicAuth}`,
-        'Content-Type': 'application/json',
-      },
-    });
-  }
+  const basicAuth = Buffer.from(`${driverOptions.token}:${driverOptions.secretKey}`).toString('base64');
+  const apiClient = axios.create({
+    baseURL: 'https://api.mailjet.com/v3.1',
+    headers: {
+      Authorization: `Basic ${basicAuth}`,
+      'Content-Type': 'application/json',
+    },
+  });
 
-  async sendMail0(options: SendMailOptions): Promise<SendMailResponse> {
+  const sendMail = async (options: SendMailOptions) => {
     if (hasHostedAttachments(options.attachments)) {
-      throw this.composeProcessingError('mailjet doesnt allow hosted attachments');
+      throw composeProcessingError('mailjet doesnt allow hosted attachments');
     }
 
     // Prepare the payload for Mailjet API v3.1
@@ -117,12 +118,10 @@ export default class MailjetDriver extends UnmailDriver<MailjetDriverOptions, Ax
       });
     }
 
-    if (this.modifyApiPayload) {
-      payload = this.modifyApiPayload(payload);
-    }
+    payload = modifyApiPayload(payload);
 
     try {
-      const apiResponse = await this.apiClient.post('/send', payload);
+      const apiResponse = await apiClient.post('/send', payload);
       return {
         success: true,
         code: apiResponse.status,
@@ -139,5 +138,12 @@ export default class MailjetDriver extends UnmailDriver<MailjetDriverOptions, Ax
         payload: payload,
       };
     }
-  }
-}
+  };
+
+  return {
+    type: 'mailjet',
+    options: driverOptions,
+    sendMail,
+    setPayloadModifier,
+  };
+});
