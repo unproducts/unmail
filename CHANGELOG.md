@@ -1,5 +1,40 @@
 # Changelog
 
+## v0.1.0
+
+[compare changes](https://github.com/unproducts/unmail/compare/v0.0.6...v0.1.0)
+
+### 💅 Refactors
+
+- Class based to closure based system for driver impl ([70e4148](https://github.com/unproducts/unmail/commit/70e4148))
+- ⚠️  Resend ([2be6dd3](https://github.com/unproducts/unmail/commit/2be6dd3))
+- ⚠️  Postmark ([c48b4d0](https://github.com/unproducts/unmail/commit/c48b4d0))
+- ⚠️  Mocker ([562f0d9](https://github.com/unproducts/unmail/commit/562f0d9))
+- ⚠️  Mailersend ([f8aa8c4](https://github.com/unproducts/unmail/commit/f8aa8c4))
+- ⚠️  Mailchimp ([86f03cf](https://github.com/unproducts/unmail/commit/86f03cf))
+- ⚠️  Mailjet ([a5aa083](https://github.com/unproducts/unmail/commit/a5aa083))
+- ⚠️  Sendgrid ([dd17c4e](https://github.com/unproducts/unmail/commit/dd17c4e))
+- ⚠️  Simplified structure ([fa592d7](https://github.com/unproducts/unmail/commit/fa592d7))
+
+### 🏡 Chore
+
+- Prettier format ([a7a0eb1](https://github.com/unproducts/unmail/commit/a7a0eb1))
+
+#### ⚠️ Breaking Changes
+
+- ⚠️  Resend ([2be6dd3](https://github.com/unproducts/unmail/commit/2be6dd3))
+- ⚠️  Postmark ([c48b4d0](https://github.com/unproducts/unmail/commit/c48b4d0))
+- ⚠️  Mocker ([562f0d9](https://github.com/unproducts/unmail/commit/562f0d9))
+- ⚠️  Mailersend ([f8aa8c4](https://github.com/unproducts/unmail/commit/f8aa8c4))
+- ⚠️  Mailchimp ([86f03cf](https://github.com/unproducts/unmail/commit/86f03cf))
+- ⚠️  Mailjet ([a5aa083](https://github.com/unproducts/unmail/commit/a5aa083))
+- ⚠️  Sendgrid ([dd17c4e](https://github.com/unproducts/unmail/commit/dd17c4e))
+- ⚠️  Simplified structure ([fa592d7](https://github.com/unproducts/unmail/commit/fa592d7))
+
+### ❤️ Contributors
+
+- Amandesai01 <amandesai01@gmail.com>
+
 ## v0.0.6
 
 [compare changes](https://github.com/unproducts/unmail/compare/v0.0.5...v0.0.6)
