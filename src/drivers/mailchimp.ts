@@ -1,30 +1,30 @@
 import axios, { AxiosError } from 'axios';
 
-import { SendMailOptions, SendMailResponse } from './internal/types';
-import { UnmailDriver } from './internal/abstract';
-import { hasHostedAttachments } from './internal/utils';
+import { defineUnmailDriver } from './internal/abstract';
+import { SendMailOptions } from './internal/types';
+import { AuthenticationOptions, DEFAULT_PAYLOAD_MODIFIER, hasHostedAttachments, PayloadModifier } from './internal/utils';
+import { makeProcessingErrorComposer } from './internal/error';
 
-export type MailchimpDriverOptions = {
-  token: string;
-};
+export type MailchimpDriverOptions = AuthenticationOptions;
 
-export default class MailchimpDriver extends UnmailDriver<MailchimpDriverOptions, AxiosError> {
-  constructor(options: MailchimpDriverOptions) {
-    super(options, 'mailchimp');
-  }
+export default defineUnmailDriver<MailchimpDriverOptions>((driverOptions) => {
+  const composeProcessingError = makeProcessingErrorComposer('mailchimp');
 
-  async init(): Promise<void> {
-    this.apiClient = axios.create({
-      baseURL: 'https://mandrillapp.com/api/1.0',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-  }
+  let modifyApiPayload = DEFAULT_PAYLOAD_MODIFIER;
+  const setPayloadModifier = (payloadModifier: PayloadModifier) => {
+    modifyApiPayload = payloadModifier;
+  };
 
-  async sendMail0(options: SendMailOptions): Promise<SendMailResponse<AxiosError>> {
+  const apiClient = axios.create({
+    baseURL: 'https://mandrillapp.com/api/1.0',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  const sendMail = async (options: SendMailOptions) => {
     if (hasHostedAttachments(options.attachments)) {
-      throw this.composeProcessingError('mailchimp doesnt allow hosted attachments');
+      throw composeProcessingError('mailchimp doesnt allow hosted attachments');
     }
 
     // Determine if we're sending with template or regular send
@@ -107,7 +107,7 @@ export default class MailchimpDriver extends UnmailDriver<MailchimpDriverOptions
 
     // Prepare the main payload
     let payload: any = {
-      key: this.options.token,
+      key: driverOptions.token,
       message: message,
     };
 
@@ -130,12 +130,10 @@ export default class MailchimpDriver extends UnmailDriver<MailchimpDriverOptions
       }
     }
 
-    if (this.modifyApiPayload) {
-      payload = this.modifyApiPayload(payload);
-    }
+    payload = modifyApiPayload(payload);
 
     try {
-      const apiResponse = await this.apiClient.post(endpoint, payload);
+      const apiResponse = await apiClient.post(endpoint, payload);
 
       // Mailchimp returns an array of results, one per recipient
       if (apiResponse.data && Array.isArray(apiResponse.data)) {
@@ -186,5 +184,12 @@ export default class MailchimpDriver extends UnmailDriver<MailchimpDriverOptions
         };
       }
     }
-  }
-}
+  };
+
+  return {
+    type: 'mailchimp',
+    options: driverOptions,
+    sendMail,
+    setPayloadModifier,
+  };
+});
