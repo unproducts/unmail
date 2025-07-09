@@ -1,30 +1,30 @@
 import axios, { AxiosError } from 'axios';
 
-import { SendMailOptions, SendMailResponse } from './internal/types';
-import { UnmailDriver } from './internal/abstract';
-import { mailStringFromIdentity } from './internal/utils';
+import { SendMailOptions } from './internal/types';
+import { defineUnmailDriver } from './internal/abstract';
+import {
+  AuthenticationOptions,
+  DEFAULT_PAYLOAD_MODIFIER,
+  mailStringFromIdentity,
+  PayloadModifier,
+} from './internal/utils';
 
-export type PostmarkDriverOptions = {
-  token: string;
-};
+export default defineUnmailDriver<AuthenticationOptions>((driverOptions) => {
+  let modifyApiPayload = DEFAULT_PAYLOAD_MODIFIER;
+  const setPayloadModifier = (payloadModifier: PayloadModifier) => {
+    modifyApiPayload = payloadModifier;
+  };
 
-export default class PostmarkDriver extends UnmailDriver<PostmarkDriverOptions, AxiosError> {
-  constructor(options: PostmarkDriverOptions) {
-    super(options, 'postmark');
-  }
+  const apiClient = axios.create({
+    baseURL: 'https://api.postmarkapp.com',
+    headers: {
+      'X-Postmark-Server-Token': driverOptions.token,
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+  });
 
-  async init(): Promise<void> {
-    this.apiClient = axios.create({
-      baseURL: 'https://api.postmarkapp.com',
-      headers: {
-        'X-Postmark-Server-Token': this.options.token,
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-    });
-  }
-
-  async sendMail0(options: SendMailOptions): Promise<SendMailResponse> {
+  const sendMail = async (options: SendMailOptions) => {
     // Prepare the payload for Postmark API
     let payload: any = {
       From: mailStringFromIdentity(options.from),
@@ -92,12 +92,10 @@ export default class PostmarkDriver extends UnmailDriver<PostmarkDriverOptions, 
       });
     }
 
-    if (this.modifyApiPayload) {
-      payload = this.modifyApiPayload(payload);
-    }
+    payload = modifyApiPayload(payload);
 
     try {
-      const apiResponse = await this.apiClient.post('/email', payload);
+      const apiResponse = await apiClient.post('/email', payload);
       return {
         success: true,
         code: apiResponse.status,
@@ -114,5 +112,12 @@ export default class PostmarkDriver extends UnmailDriver<PostmarkDriverOptions, 
         payload: payload,
       };
     }
-  }
-}
+  };
+
+  return {
+    type: 'postmark',
+    options: driverOptions,
+    sendMail,
+    setPayloadModifier,
+  };
+});
