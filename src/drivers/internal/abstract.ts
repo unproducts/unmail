@@ -4,7 +4,7 @@ import { baseMailOptionsValidation } from './validation';
 export type UnmailDriver<O extends DriverOptions = DriverOptions> = {
   options: Readonly<O>;
   type: string;
-  sendMail(options: SendMailOptions): Promise<SendMailResponse<Error>>;
+  sendMail(options: SendMailOptions): Promise<SendMailResponse>;
   setPayloadModifier(modifyApiPayload: (request: any) => any): void;
 };
 

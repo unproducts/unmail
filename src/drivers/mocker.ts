@@ -6,7 +6,7 @@ export type MockerOptions = {
   mode?: 'success' | 'failure';
   message?: string;
   code?: number;
-  handleResponse?: (response: SendMailResponse<MockerError>) => void;
+  handleResponse?: (response: SendMailResponse) => void;
 };
 
 export default defineUnmailDriver((options: MockerOptions) => {
@@ -18,7 +18,7 @@ export default defineUnmailDriver((options: MockerOptions) => {
     const message = options.message ?? JSON.stringify(sendOptions);
     const error = success ? new MockerError() : undefined;
 
-    const response: SendMailResponse<MockerError> = {
+    const response: SendMailResponse = {
       success,
       code,
       message,

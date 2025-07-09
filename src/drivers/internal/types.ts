@@ -36,10 +36,10 @@ export type SendMailOptions = {
   tags?: Tags;
 };
 
-export type SendMailResponse<E extends Error = AxiosError> = {
+export type SendMailResponse = {
   success: boolean;
   code: number;
-  error?: E;
+  error?: Error;
   message?: string;
   payload?: any;
 };
