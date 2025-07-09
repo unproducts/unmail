@@ -1,28 +1,26 @@
 import axios, { AxiosError } from 'axios';
 
-import { SendMailOptions, SendMailResponse } from './internal/types';
-import { UnmailDriver } from './internal/abstract';
+import { defineUnmailDriver } from './internal/abstract';
+import { SendMailOptions } from './internal/types';
+import { AuthenticationOptions, DEFAULT_PAYLOAD_MODIFIER, PayloadModifier } from './internal/utils';
 
-export type SendGridDriverOptions = {
-  token: string;
-};
+export type SendGridDriverOptions = AuthenticationOptions;
 
-export default class SendGridDriver extends UnmailDriver<SendGridDriverOptions, AxiosError> {
-  constructor(options: SendGridDriverOptions) {
-    super(options, 'sendgrid');
-  }
+export default defineUnmailDriver<SendGridDriverOptions>((driverOptions) => {
+  let modifyApiPayload = DEFAULT_PAYLOAD_MODIFIER;
+  const setPayloadModifier = (payloadModifier: PayloadModifier) => {
+    modifyApiPayload = payloadModifier;
+  };
 
-  async init(): Promise<void> {
-    this.apiClient = axios.create({
-      baseURL: 'https://api.sendgrid.com',
-      headers: {
-        Authorization: `Bearer ${this.options.token}`,
-        'Content-Type': 'application/json',
-      },
-    });
-  }
+  const apiClient = axios.create({
+    baseURL: 'https://api.sendgrid.com',
+    headers: {
+      Authorization: `Bearer ${driverOptions.token}`,
+      'Content-Type': 'application/json',
+    },
+  });
 
-  async sendMail0(options: SendMailOptions): Promise<SendMailResponse> {
+  const sendMail = async (options: SendMailOptions) => {
     // Prepare the personalizations array for SendGrid API
     const personalizations: any[] = [
       {
@@ -126,12 +124,10 @@ export default class SendGridDriver extends UnmailDriver<SendGridDriverOptions, 
       });
     }
 
-    if (this.modifyApiPayload) {
-      payload = this.modifyApiPayload(payload);
-    }
+    payload = modifyApiPayload(payload);
 
     try {
-      const apiResponse = await this.apiClient.post('/v3/mail/send', payload);
+      const apiResponse = await apiClient.post('/v3/mail/send', payload);
       return {
         success: true,
         code: apiResponse.status,
@@ -148,5 +144,12 @@ export default class SendGridDriver extends UnmailDriver<SendGridDriverOptions, 
         payload: payload,
       };
     }
-  }
-}
+  };
+
+  return {
+    type: 'sendgrid',
+    options: driverOptions,
+    sendMail,
+    setPayloadModifier,
+  };
+});
