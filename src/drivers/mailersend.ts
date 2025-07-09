@@ -1,29 +1,36 @@
 import axios, { AxiosError } from 'axios';
 
-import { SendMailOptions, SendMailResponse } from './internal/types';
-import { UnmailDriver } from './internal/abstract';
-import { hasHostedAttachments } from './internal/utils';
+import { defineUnmailDriver } from './internal/abstract';
+import { SendMailOptions } from './internal/types';
+import {
+  AuthenticationOptions,
+  DEFAULT_PAYLOAD_MODIFIER,
+  hasHostedAttachments,
+  PayloadModifier,
+} from './internal/utils';
+import { makeProcessingErrorComposer } from './internal/error';
 
-export type MailerSendDriverOptions = { token: string };
+export type MailerSendDriverOptions = AuthenticationOptions;
 
-export default class MailerSendDriver extends UnmailDriver<MailerSendDriverOptions, AxiosError> {
-  constructor(options: MailerSendDriverOptions) {
-    super(options, 'mailersend');
-  }
+export default defineUnmailDriver<MailerSendDriverOptions>((driverOptions) => {
+  const composeProcessingError = makeProcessingErrorComposer('mailersend');
 
-  async init(): Promise<void> {
-    this.apiClient = axios.create({
-      baseURL: 'https://api.mailersend.com/v1',
-      headers: {
-        Authorization: `Bearer ${this.options.token}`,
-        'Content-Type': 'application/json',
-      },
-    });
-  }
+  let modifyApiPayload = DEFAULT_PAYLOAD_MODIFIER;
+  const setPayloadModifier = (payloadModifier: PayloadModifier) => {
+    modifyApiPayload = payloadModifier;
+  };
 
-  async sendMail0(options: SendMailOptions): Promise<SendMailResponse> {
+  const apiClient = axios.create({
+    baseURL: 'https://api.mailersend.com/v1',
+    headers: {
+      Authorization: `Bearer ${driverOptions.token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+
+  const sendMail = async (options: SendMailOptions) => {
     if (hasHostedAttachments(options.attachments)) {
-      throw this.composeProcessingError('mailersend doesnt allow hosted attachments');
+      throw composeProcessingError('mailersend doesnt allow hosted attachments');
     }
 
     // Prepare the payload for MailerSend API
@@ -96,12 +103,10 @@ export default class MailerSendDriver extends UnmailDriver<MailerSendDriverOptio
       });
     }
 
-    if (this.modifyApiPayload) {
-      payload = this.modifyApiPayload(payload);
-    }
+    payload = modifyApiPayload(payload);
 
     try {
-      const apiResponse = await this.apiClient.post('/email', payload);
+      const apiResponse = await apiClient.post('/email', payload);
       return {
         success: true,
         code: apiResponse.status,
@@ -118,5 +123,12 @@ export default class MailerSendDriver extends UnmailDriver<MailerSendDriverOptio
         payload: payload,
       };
     }
-  }
-}
+  };
+
+  return {
+    type: 'mailersend',
+    options: driverOptions,
+    sendMail,
+    setPayloadModifier,
+  };
+});
