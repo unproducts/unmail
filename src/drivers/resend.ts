@@ -1,36 +1,43 @@
-import axios, { AxiosInstance, AxiosError } from 'axios';
+import axios, { AxiosError } from 'axios';
 
-import { UnmailDriver } from './internal/abstract';
-import { SendMailOptions, SendMailResponse } from './internal/types';
-import { hasInlineAttachments, mailStringFromIdentity } from './internal/utils';
+import { defineUnmailDriver } from './internal/abstract';
+import { SendMailOptions } from './internal/types';
+import {
+  AuthenticationOptions,
+  DEFAULT_PAYLOAD_MODIFIER,
+  hasInlineAttachments,
+  mailStringFromIdentity,
+  PayloadModifier,
+} from './internal/utils';
+import { makeProcessingErrorComposer } from './internal/error';
 
-export type ResendDriverOptions = {
-  token: string;
+export type ResendDriverOptions = AuthenticationOptions & {
   externaliseInlineAttachments?: boolean;
 };
 
-export default class ResendDriver extends UnmailDriver<ResendDriverOptions, AxiosError> {
-  constructor(options: ResendDriverOptions) {
-    super(options, 'resend');
-  }
+export default defineUnmailDriver<ResendDriverOptions>((driverOptions) => {
+  const composeProcessingError = makeProcessingErrorComposer('resend');
 
-  async init(): Promise<void> {
-    this.apiClient = axios.create({
-      baseURL: 'https://api.resend.com',
-      headers: {
-        Authorization: `Bearer ${this.options.token}`,
-        'Content-Type': 'application/json',
-      },
-    });
-  }
+  let modifyApiPayload = DEFAULT_PAYLOAD_MODIFIER;
+  const setPayloadModifier = (payloadModifier: PayloadModifier) => {
+    modifyApiPayload = payloadModifier;
+  };
 
-  protected async sendMail0(options: SendMailOptions): Promise<SendMailResponse<AxiosError>> {
+  const apiClient = axios.create({
+    baseURL: 'https://api.resend.com',
+    headers: {
+      Authorization: `Bearer ${driverOptions.token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+
+  const sendMail = async (options: SendMailOptions) => {
     if (!(options.text || options.html) && options.templateId) {
-      throw this.composeProcessingError('resend doesnt support templates yet');
+      throw composeProcessingError('resend doesnt support templates yet');
     }
 
-    if (!this.options.externaliseInlineAttachments && hasInlineAttachments(options.attachments)) {
-      throw this.composeProcessingError(
+    if (!driverOptions.externaliseInlineAttachments && hasInlineAttachments(options.attachments)) {
+      throw composeProcessingError(
         'resend doesnt support inline attachments. If you want to automatically convert it to external, set `externaliseInlineAttachments` to true in driver options.'
       );
     }
@@ -92,12 +99,10 @@ export default class ResendDriver extends UnmailDriver<ResendDriverOptions, Axio
       });
     }
 
-    if (this.modifyApiPayload) {
-      payload = this.modifyApiPayload(payload);
-    }
+    payload = modifyApiPayload(payload);
 
     try {
-      const apiResponse = await this.apiClient.post('/emails', payload);
+      const apiResponse = await apiClient.post('/emails', payload);
 
       if (apiResponse.data && apiResponse.data.id) {
         return {
@@ -135,5 +140,12 @@ export default class ResendDriver extends UnmailDriver<ResendDriverOptions, Axio
         };
       }
     }
-  }
-}
+  };
+
+  return {
+    type: 'resend',
+    options: driverOptions,
+    sendMail,
+    setPayloadModifier,
+  };
+});
