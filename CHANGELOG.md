@@ -1,6 +1,5 @@
 # Changelog
 
-
 ## v0.0.6
 
 [compare changes](https://github.com/unproducts/unmail/compare/v0.0.5...v0.0.6)
@@ -66,7 +65,6 @@
 
 ## v0.0.1
 
-
 ### 🚀 Enhancements
 
 - Initial unmail framework ([067f961](https://github.com/unproducts/unmail/commit/067f961))
@@ -91,7 +89,7 @@
 - **docs:** Readme with basic cover ([a19652a](https://github.com/unproducts/unmail/commit/a19652a))
 - Lint and automd ([74d097f](https://github.com/unproducts/unmail/commit/74d097f))
 - **refactor:** Move utils and abstract to internal driver ([99dd571](https://github.com/unproducts/unmail/commit/99dd571))
-- Ignore  build files ([fe10c3a](https://github.com/unproducts/unmail/commit/fe10c3a))
+- Ignore build files ([fe10c3a](https://github.com/unproducts/unmail/commit/fe10c3a))
 - **refactor:** Move types to internal for drivers ([36d3520](https://github.com/unproducts/unmail/commit/36d3520))
 - **build:** Fix build config and distribution ([27d8226](https://github.com/unproducts/unmail/commit/27d8226))
 
@@ -99,4 +97,3 @@
 
 - Amandesai01 <amandesai01@gmail.com>
 - Aman Desai ([@amandesai01](http://github.com/amandesai01))
-

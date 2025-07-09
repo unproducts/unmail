@@ -18,7 +18,7 @@ export default class MailchimpDriver extends UnmailDriver<MailchimpDriverOptions
       baseURL: 'https://mandrillapp.com/api/1.0',
       headers: {
         'Content-Type': 'application/json',
-      }
+      },
     });
   }
 
@@ -34,27 +34,27 @@ export default class MailchimpDriver extends UnmailDriver<MailchimpDriverOptions
     const message: any = {
       from_email: options.from.email,
       from_name: options.from.name || options.from.email,
-      to: options.to.map(t => ({
+      to: options.to.map((t) => ({
         email: t.email,
         name: t.name,
-        type: 'to'
-      }))
+        type: 'to',
+      })),
     };
 
     if (options.cc && options.cc.length > 0) {
-      const ccRecipients = options.cc.map(c => ({
+      const ccRecipients = options.cc.map((c) => ({
         email: c.email,
         name: c.name,
-        type: 'cc'
+        type: 'cc',
       }));
       message.to = [...message.to, ...ccRecipients];
     }
 
     if (options.bcc && options.bcc.length > 0) {
-      const bccRecipients = options.bcc.map(b => ({
+      const bccRecipients = options.bcc.map((b) => ({
         email: b.email,
         name: b.name,
-        type: 'bcc'
+        type: 'bcc',
       }));
       message.to = [...message.to, ...bccRecipients];
     }
@@ -87,12 +87,12 @@ export default class MailchimpDriver extends UnmailDriver<MailchimpDriverOptions
 
     // Add tags
     if (options.tags && options.tags.length > 0) {
-      message.tags = options.tags.map(tag => tag.name || tag.value);
+      message.tags = options.tags.map((tag) => tag.name || tag.value);
     }
 
     // Add attachments
     if (options.attachments && options.attachments.length > 0) {
-      message.attachments = options.attachments.map(a => {
+      message.attachments = options.attachments.map((a) => {
         const content = Buffer.isBuffer(a.content)
           ? a.content.toString('base64')
           : Buffer.from(a.content).toString('base64');
@@ -100,7 +100,7 @@ export default class MailchimpDriver extends UnmailDriver<MailchimpDriverOptions
         return {
           type: a.contentType,
           name: a.filename,
-          content: content
+          content: content,
         };
       });
     }
@@ -108,7 +108,7 @@ export default class MailchimpDriver extends UnmailDriver<MailchimpDriverOptions
     // Prepare the main payload
     let payload: any = {
       key: this.options.token,
-      message: message
+      message: message,
     };
 
     // For template-based emails
@@ -124,7 +124,7 @@ export default class MailchimpDriver extends UnmailDriver<MailchimpDriverOptions
         for (const [key, value] of Object.entries(templateVars)) {
           payload.global_merge_vars.push({
             name: key,
-            content: value
+            content: value,
           });
         }
       }

@@ -9,7 +9,6 @@ export type PostmarkDriverOptions = {
 };
 
 export default class PostmarkDriver extends UnmailDriver<PostmarkDriverOptions, AxiosError> {
-
   constructor(options: PostmarkDriverOptions) {
     super(options, 'postmark');
   }
@@ -20,8 +19,8 @@ export default class PostmarkDriver extends UnmailDriver<PostmarkDriverOptions, 
       headers: {
         'X-Postmark-Server-Token': this.options.token,
         'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      }
+        Accept: 'application/json',
+      },
     });
   }
 
@@ -30,7 +29,7 @@ export default class PostmarkDriver extends UnmailDriver<PostmarkDriverOptions, 
     let payload: any = {
       From: mailStringFromIdentity(options.from),
       To: options.to.map(mailStringFromIdentity).join(','),
-      MessageStream: 'outbound'
+      MessageStream: 'outbound',
     };
 
     if (options.cc && options.cc.length > 0) {
@@ -67,14 +66,14 @@ export default class PostmarkDriver extends UnmailDriver<PostmarkDriverOptions, 
     }
 
     if (options.headers) {
-      payload.Headers = Object.keys(options.headers).map(key => ({
+      payload.Headers = Object.keys(options.headers).map((key) => ({
         Name: key,
-        Value: options.headers![key]
+        Value: options.headers![key],
       }));
     }
 
     if (options.attachments && options.attachments.length > 0) {
-      payload.Attachments = options.attachments.map(a => {
+      payload.Attachments = options.attachments.map((a) => {
         const content = Buffer.isBuffer(a.content)
           ? a.content.toString('base64')
           : Buffer.from(a.content).toString('base64');
@@ -82,7 +81,7 @@ export default class PostmarkDriver extends UnmailDriver<PostmarkDriverOptions, 
         const attachment: any = {
           Name: a.filename,
           Content: content,
-          ContentType: a.contentType
+          ContentType: a.contentType,
         };
 
         if (a.disposition === 'inline' && a.cid) {

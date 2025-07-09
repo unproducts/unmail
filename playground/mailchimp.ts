@@ -66,11 +66,11 @@ const r4 = mailer.sendMail({
   text: 'This email includes custom tags and headers.',
   tags: [
     { name: 'test', value: 'true' },
-    { name: 'environment', value: 'development' }
+    { name: 'environment', value: 'development' },
   ],
   headers: {
     'X-Custom-Header': 'test-value',
-    'X-Priority': 'high'
+    'X-Priority': 'high',
   },
 });
 

@@ -8,7 +8,6 @@ export type SendGridDriverOptions = {
 };
 
 export default class SendGridDriver extends UnmailDriver<SendGridDriverOptions, AxiosError> {
-
   constructor(options: SendGridDriverOptions) {
     super(options, 'sendgrid');
   }
@@ -17,33 +16,35 @@ export default class SendGridDriver extends UnmailDriver<SendGridDriverOptions, 
     this.apiClient = axios.create({
       baseURL: 'https://api.sendgrid.com',
       headers: {
-        'Authorization': `Bearer ${this.options.token}`,
+        Authorization: `Bearer ${this.options.token}`,
         'Content-Type': 'application/json',
-      }
+      },
     });
   }
 
   async sendMail0(options: SendMailOptions): Promise<SendMailResponse> {
     // Prepare the personalizations array for SendGrid API
-    const personalizations: any[] = [{
-      to: options.to.map(t => ({
-        email: t.email,
-        name: t.name
-      }))
-    }];
+    const personalizations: any[] = [
+      {
+        to: options.to.map((t) => ({
+          email: t.email,
+          name: t.name,
+        })),
+      },
+    ];
 
     // Add CC and BCC to the first personalization
     if (options.cc && options.cc.length > 0) {
-      personalizations[0].cc = options.cc.map(c => ({
+      personalizations[0].cc = options.cc.map((c) => ({
         email: c.email,
-        name: c.name
+        name: c.name,
       }));
     }
 
     if (options.bcc && options.bcc.length > 0) {
-      personalizations[0].bcc = options.bcc.map(b => ({
+      personalizations[0].bcc = options.bcc.map((b) => ({
         email: b.email,
-        name: b.name
+        name: b.name,
       }));
     }
 
@@ -65,14 +66,14 @@ export default class SendGridDriver extends UnmailDriver<SendGridDriverOptions, 
       personalizations,
       from: {
         email: options.from.email,
-        name: options.from.name
-      }
+        name: options.from.name,
+      },
     };
 
     if (options.replyTo) {
       payload.reply_to = {
         email: options.replyTo.email,
-        name: options.replyTo.name
+        name: options.replyTo.name,
       };
     }
 
@@ -84,20 +85,20 @@ export default class SendGridDriver extends UnmailDriver<SendGridDriverOptions, 
       if (options.text) {
         payload.content.push({
           type: 'text/plain',
-          value: options.text
+          value: options.text,
         });
       }
       if (options.html) {
         payload.content.push({
           type: 'text/html',
-          value: options.html
+          value: options.html,
         });
       }
     }
 
     if (options.tags && options.tags.length > 0) {
       // SendGrid uses categories instead of tags
-      payload.categories = options.tags.map(tag => tag.name).slice(0, 10); // Max 10 categories
+      payload.categories = options.tags.map((tag) => tag.name).slice(0, 10); // Max 10 categories
     }
 
     if (options.headers) {
@@ -105,7 +106,7 @@ export default class SendGridDriver extends UnmailDriver<SendGridDriverOptions, 
     }
 
     if (options.attachments && options.attachments.length > 0) {
-      payload.attachments = options.attachments.map(a => {
+      payload.attachments = options.attachments.map((a) => {
         const content = Buffer.isBuffer(a.content)
           ? a.content.toString('base64')
           : Buffer.from(a.content).toString('base64');
@@ -114,7 +115,7 @@ export default class SendGridDriver extends UnmailDriver<SendGridDriverOptions, 
           content,
           filename: a.filename,
           type: a.contentType,
-          disposition: a.disposition || 'attachment'
+          disposition: a.disposition || 'attachment',
         };
 
         if (a.disposition === 'inline' && a.cid) {

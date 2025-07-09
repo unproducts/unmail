@@ -10,7 +10,6 @@ export type MailjetDriverOptions = {
 };
 
 export default class MailjetDriver extends UnmailDriver<MailjetDriverOptions, AxiosError> {
-
   constructor(options: MailjetDriverOptions) {
     super(options, 'mailjet');
   }
@@ -21,9 +20,9 @@ export default class MailjetDriver extends UnmailDriver<MailjetDriverOptions, Ax
     this.apiClient = axios.create({
       baseURL: 'https://api.mailjet.com/v3.1',
       headers: {
-        'Authorization': `Basic ${basicAuth}`,
+        Authorization: `Basic ${basicAuth}`,
         'Content-Type': 'application/json',
-      }
+      },
     });
   }
 
@@ -38,36 +37,36 @@ export default class MailjetDriver extends UnmailDriver<MailjetDriverOptions, Ax
         {
           From: {
             Email: options.from.email,
-            Name: options.from.name
+            Name: options.from.name,
           },
-          To: options.to.map(t => ({
+          To: options.to.map((t) => ({
             Email: t.email,
-            Name: t.name
-          }))
-        }
-      ]
+            Name: t.name,
+          })),
+        },
+      ],
     };
 
     const message = payload.Messages[0];
 
     if (options.cc && options.cc.length > 0) {
-      message.Cc = options.cc.map(c => ({
+      message.Cc = options.cc.map((c) => ({
         Email: c.email,
-        Name: c.name
+        Name: c.name,
       }));
     }
 
     if (options.bcc && options.bcc.length > 0) {
-      message.Bcc = options.bcc.map(b => ({
+      message.Bcc = options.bcc.map((b) => ({
         Email: b.email,
-        Name: b.name
+        Name: b.name,
       }));
     }
 
     if (options.replyTo) {
       message.ReplyTo = {
         Email: options.replyTo.email,
-        Name: options.replyTo.name
+        Name: options.replyTo.name,
       };
     }
 
@@ -96,7 +95,7 @@ export default class MailjetDriver extends UnmailDriver<MailjetDriverOptions, Ax
       message.Attachments = [];
       message.InlinedAttachments = [];
 
-      options.attachments.forEach(a => {
+      options.attachments.forEach((a) => {
         const content = Buffer.isBuffer(a.content)
           ? a.content.toString('base64')
           : Buffer.from(a.content).toString('base64');
@@ -104,13 +103,13 @@ export default class MailjetDriver extends UnmailDriver<MailjetDriverOptions, Ax
         const attachment = {
           ContentType: a.contentType,
           Filename: a.filename,
-          Base64Content: content
+          Base64Content: content,
         };
 
         if (a.disposition === 'inline') {
           message.InlinedAttachments.push({
             ...attachment,
-            ContentID: a.cid
+            ContentID: a.cid,
           });
         } else {
           message.Attachments.push(attachment);

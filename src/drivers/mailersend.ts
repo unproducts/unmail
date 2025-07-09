@@ -7,7 +7,6 @@ import { hasHostedAttachments } from './internal/utils';
 export type MailerSendDriverOptions = { token: string };
 
 export default class MailerSendDriver extends UnmailDriver<MailerSendDriverOptions, AxiosError> {
-
   constructor(options: MailerSendDriverOptions) {
     super(options, 'mailersend');
   }
@@ -16,9 +15,9 @@ export default class MailerSendDriver extends UnmailDriver<MailerSendDriverOptio
     this.apiClient = axios.create({
       baseURL: 'https://api.mailersend.com/v1',
       headers: {
-        'Authorization': `Bearer ${this.options.token}`,
+        Authorization: `Bearer ${this.options.token}`,
         'Content-Type': 'application/json',
-      }
+      },
     });
   }
 
@@ -31,32 +30,32 @@ export default class MailerSendDriver extends UnmailDriver<MailerSendDriverOptio
     let payload: any = {
       from: {
         email: options.from.email,
-        name: options.from.name
+        name: options.from.name,
       },
-      to: options.to.map(t => ({
+      to: options.to.map((t) => ({
         email: t.email,
-        name: t.name
-      }))
+        name: t.name,
+      })),
     };
 
     if (options.cc && options.cc.length > 0) {
-      payload.cc = options.cc.map(c => ({
+      payload.cc = options.cc.map((c) => ({
         email: c.email,
-        name: c.name
+        name: c.name,
       }));
     }
 
     if (options.bcc && options.bcc.length > 0) {
-      payload.bcc = options.bcc.map(b => ({
+      payload.bcc = options.bcc.map((b) => ({
         email: b.email,
-        name: b.name
+        name: b.name,
       }));
     }
 
     if (options.replyTo) {
       payload.reply_to = {
         email: options.replyTo.email,
-        name: options.replyTo.name
+        name: options.replyTo.name,
       };
     }
 
@@ -76,14 +75,14 @@ export default class MailerSendDriver extends UnmailDriver<MailerSendDriverOptio
     }
 
     if (options.headers) {
-      payload.headers = Object.keys(options.headers).map(key => ({
+      payload.headers = Object.keys(options.headers).map((key) => ({
         name: key,
-        value: options.headers![key]
+        value: options.headers![key],
       }));
     }
 
     if (options.attachments && options.attachments.length > 0) {
-      payload.attachments = options.attachments.map(a => {
+      payload.attachments = options.attachments.map((a) => {
         const content = Buffer.isBuffer(a.content)
           ? a.content.toString('base64')
           : Buffer.from(a.content).toString('base64');
@@ -92,7 +91,7 @@ export default class MailerSendDriver extends UnmailDriver<MailerSendDriverOptio
           content,
           filename: a.filename,
           disposition: a.disposition || 'attachment',
-          id: a.cid
+          id: a.cid,
         };
       });
     }
@@ -121,4 +120,3 @@ export default class MailerSendDriver extends UnmailDriver<MailerSendDriverOptio
     }
   }
 }
-

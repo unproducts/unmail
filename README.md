@@ -21,16 +21,16 @@ Unified email API for sending transactional emails across 10+ providers. You can
 
 ## Supported Drivers Checklist
 
-| Name | Status |
-|------|----------------|
-| Mailchimp | ✅ |
-| Mailersend | ✅ |
-| Resend | ✅ |
-| Sendgrid | ✅ |
-| Mailjet | ✅ |
-| Postmark | ✅ |
-| Listmonk |  |
-| Sendinblue |  |
+| Name       | Status |
+| ---------- | ------ |
+| Mailchimp  | ✅     |
+| Mailersend | ✅     |
+| Resend     | ✅     |
+| Sendgrid   | ✅     |
+| Mailjet    | ✅     |
+| Postmark   | ✅     |
+| Listmonk   |        |
+| Sendinblue |        |
 
 ## Usage
 

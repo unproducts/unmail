@@ -7,7 +7,7 @@ export abstract class UnmailDriver<DriverOptions = any, E extends Error = Error>
 
   // @ts-expect-error - apiClient is initialized in the init method
   protected apiClient: AxiosInstance;
-  protected modifyApiPayload?: ((request: any) => any);
+  protected modifyApiPayload?: (request: any) => any;
 
   readonly options: DriverOptions;
   protected readonly composeValidationError;
