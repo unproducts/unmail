@@ -38,7 +38,10 @@
     "lint:fix": "automd && eslint . --fix && prettier -w .",
     "prepack": "yarn build",
     "play": "jiti playground",
-    "release": "changelogen --release && npm publish && git push --follow-tags"
+    "release": "changelogen --release && npm publish && git push --follow-tags",
+    "docs:dev": "vitepress dev docs/site",
+    "docs:build": "vitepress build docs/site",
+    "docs:preview": "vitepress preview docs/site"
   },
   "devDependencies": {
     "@types/node": "^22.1.0",
@@ -52,6 +55,7 @@
     "prettier": "^3.6.2",
     "typescript": "^5.5.4",
     "unbuild": "^3.0.0-rc.7",
+    "vitepress": "^1.6.3",
     "vitest": "^2.0.5"
   },
   "publishConfig": {
