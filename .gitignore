@@ -13,3 +13,5 @@ drivers/**
 # Doc Builds
 docs/site/.vitepress/dist
 docs/site/.vitepress/cache
+
+deploy-docs.sh

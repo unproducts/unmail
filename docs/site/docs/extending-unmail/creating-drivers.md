@@ -102,7 +102,7 @@ if (hasHostedAttachments(options.attachments)) {
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| attachments | Attachment[] \| undefined | Array of email attachments |
+| attachments | Attachment[] | Array of email attachments |
 | Returns | boolean | True if any attachment has hostedPath property |
 
 ### PayloadModifier Type
