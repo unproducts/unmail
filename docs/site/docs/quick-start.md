@@ -1,6 +1,15 @@
 # Quick Start
 
+Unmail is an extensible, type-safe library for sending emails through multiple providers with a single interface.
+
+## Installation
+
+```bash
+npm install @unproducts/unmail
+```
+
 ## Basic Setup
+Configure Unmail with your preferred email service provider in just a few lines of code.
 
 ```typescript
 import { createUnmail, SendGridDriver } from 'unmail';
@@ -11,6 +20,7 @@ const unmail = await createUnmail(
 ```
 
 ## Sending a Simple Email
+Start with a basic email - includes both plain text and HTML versions for maximum compatibility.
 
 ```typescript
 await unmail.sendMail({
@@ -23,6 +33,7 @@ await unmail.sendMail({
 ```
 
 ## Using CC and BCC
+Add carbon copy (CC) and blind carbon copy (BCC) recipients to your emails.
 
 ```typescript
 await unmail.sendMail({
@@ -36,6 +47,7 @@ await unmail.sendMail({
 ```
 
 ## Adding Attachments
+Include files, documents, and images with your emails using the attachments feature.
 
 ```typescript
 await unmail.sendMail({
@@ -53,6 +65,7 @@ await unmail.sendMail({
 ```
 
 ## Using Templates
+Leverage email templates with dynamic data for consistent, personalized communications.
 
 ```typescript
 await unmail.sendMail({
@@ -70,6 +83,7 @@ await unmail.sendMail({
 ```
 
 ## Adding Custom Headers
+Customize email headers for advanced functionality and tracking capabilities.
 
 ```typescript
 await unmail.sendMail({
@@ -85,6 +99,7 @@ await unmail.sendMail({
 ```
 
 ## Using Tags
+Add metadata tags to your emails for better organization and analytics.
 
 ```typescript
 await unmail.sendMail({
@@ -100,6 +115,7 @@ await unmail.sendMail({
 ```
 
 ## Error Handling
+Implement robust error handling to manage email sending failures gracefully.
 
 ```typescript
 try {
@@ -115,6 +131,7 @@ try {
 ```
 
 ## Testing with Mock Driver
+Use the built-in mock driver for development and testing without sending real emails.
 
 ```typescript
 import { createUnmail, MockerDriver } from 'unmail';
@@ -133,5 +150,5 @@ await unmail.sendMail({
 
 ## Next Steps
 
-- [API Reference](/api/core) - Explore the complete API
-- [Drivers](/drivers/overview) - Learn about specific provider implementations
+- [Extending Unmail](/docs/extending-unmail) - Learn how to create your own drivers
+- [Drivers](/docs/drivers) - Learn about specific provider implementations
