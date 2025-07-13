@@ -2,16 +2,16 @@
 layout: home
 
 hero:
-  name: "Unmail"
+  name: "@unproducts/unmail"
   text: "Unified Email Service Provider"
   tagline: A powerful, type-safe library for sending emails through multiple providers with a single interface
   image:
-    src: /unmail-cover.png
-    alt: Unmail
+    src: /unproducts-logo.png
+    alt: Unproducts Logo
   actions:
     - theme: brand
       text: Get Started
-      link: /guide/getting-started
+      link: /docs/quick-start
     - theme: alt
       text: View on GitHub
       link: https://github.com/unproducts/unmail
@@ -37,3 +37,24 @@ features:
     details: Easy to add new email service providers through the driver interface
 ---
 
+<style>
+:root {
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: -webkit-linear-gradient(120deg, #9BA5DE 30%, #8188D3);
+
+  --vp-home-hero-image-background-image: linear-gradient(-45deg, #22223B 50%, #9BA5DE 50%);
+  --vp-home-hero-image-filter: blur(44px);
+}
+
+@media (min-width: 640px) {
+  :root {
+    --vp-home-hero-image-filter: blur(56px);
+  }
+}
+
+@media (min-width: 960px) {
+  :root {
+    --vp-home-hero-image-filter: blur(68px);
+  }
+}
+</style>

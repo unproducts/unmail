@@ -1,10 +1,14 @@
 import { defineConfig } from 'vitepress';
 
 export default defineConfig({
-  title: 'Unmail',
+  title: '@unproducts/unmail',
   description: 'A unified email service provider library for Node.js',
+  head: [
+    ['link', { rel: 'icon', href: '/unproducts-logo-compressed.png' }]
+  ],
+
   themeConfig: {
-    logo: '/unmail-cover.png',
+    logo: '/unproducts-logo-compressed.png',
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Docs', link: '/docs/quick-start' },
