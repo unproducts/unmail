@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.3.2
+
+[compare changes](https://github.com/unproducts/unmail/compare/v0.3.1...v0.3.2)
+
+### 💅 Refactors
+
+- Fix export config ([9d9a367](https://github.com/unproducts/unmail/commit/9d9a367))
+
+### ❤️ Contributors
+
+- Amandesai01 <amandesai01@gmail.com>
+
 ## v0.3.1
 
 [compare changes](https://github.com/unproducts/unmail/compare/v0.3.0...v0.3.1)
