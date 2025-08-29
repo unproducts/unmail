@@ -17,10 +17,10 @@
       "import": "./drivers/internal/*.mjs",
       "require": "./drivers/internal/*.cjs"
     },
-    "./build-kit/*": {
-      "types": "./build-kit/index.d.ts",
-      "import": "./build-kit/index.mjs",
-      "require": "./build-kit/index.cjs"
+    "./kit/*": {
+      "types": "./kit/index.d.ts",
+      "import": "./kit/index.mjs",
+      "require": "./kit/index.cjs"
     },
     ".": {
       "types": "./dist/index.d.ts",
@@ -34,7 +34,7 @@
   "files": [
     "dist",
     "drivers",
-    "build-kit"
+    "kit"
   ],
   "scripts": {
     "build": "unbuild",
