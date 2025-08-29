@@ -1,5 +1,25 @@
 # Changelog
 
+## v0.3.0
+
+[compare changes](https://github.com/unproducts/unmail/compare/v0.2.1...v0.3.0)
+
+### 💅 Refactors
+
+- ⚠️  New kit module ([b303532](https://github.com/unproducts/unmail/commit/b303532))
+
+### 🏡 Chore
+
+- **mocker:** Add pretty print functionality to mocker ([42275b9](https://github.com/unproducts/unmail/commit/42275b9))
+
+#### ⚠️ Breaking Changes
+
+- ⚠️  New kit module ([b303532](https://github.com/unproducts/unmail/commit/b303532))
+
+### ❤️ Contributors
+
+- Amandesai01 <amandesai01@gmail.com>
+
 ## v0.2.1
 
 [compare changes](https://github.com/unproducts/unmail/compare/v0.2.0...v0.2.1)
