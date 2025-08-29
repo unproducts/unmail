@@ -19,5 +19,17 @@ export default defineBuildConfig({
       ext: 'cjs',
       declaration: false,
     },
+    {
+      input: 'src/drivers/internal/',
+      outDir: 'kit',
+      format: 'esm',
+    },
+    {
+      input: 'src/drivers/internal/',
+      outDir: 'kit',
+      format: 'cjs',
+      ext: 'cjs',
+      declaration: false,
+    }
   ],
 });

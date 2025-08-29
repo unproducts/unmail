@@ -8,10 +8,13 @@ coverage
 
 # Build files
 dist
-drivers/**
+drivers
+build-kit
 
 # Doc Builds
 docs/site/.vitepress/dist
 docs/site/.vitepress/cache
 
 deploy-docs.sh
+docs-build
+output.zip
