@@ -17,7 +17,7 @@
       "import": "./drivers/internal/*.mjs",
       "require": "./drivers/internal/*.cjs"
     },
-    "./kit/*": {
+    "./kit": {
       "types": "./kit/index.d.ts",
       "import": "./kit/index.mjs",
       "require": "./kit/index.cjs"
