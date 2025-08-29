@@ -1,5 +1,29 @@
 # Changelog
 
+## v0.2.0
+
+[compare changes](https://github.com/unproducts/unmail/compare/v0.1.0...v0.2.0)
+
+### 📖 Documentation
+
+- New cover ([0c0d012](https://github.com/unproducts/unmail/commit/0c0d012))
+- Init vitepress ([a5f57f8](https://github.com/unproducts/unmail/commit/a5f57f8))
+- Init content + brand theme ([1f596e3](https://github.com/unproducts/unmail/commit/1f596e3))
+- Logo assets and better docs links ([9d087d4](https://github.com/unproducts/unmail/commit/9d087d4))
+- Fix dead link ([eff0e31](https://github.com/unproducts/unmail/commit/eff0e31))
+
+### 🏡 Chore
+
+- ⚠️  New export structure ([975e9cc](https://github.com/unproducts/unmail/commit/975e9cc))
+
+#### ⚠️ Breaking Changes
+
+- ⚠️  New export structure ([975e9cc](https://github.com/unproducts/unmail/commit/975e9cc))
+
+### ❤️ Contributors
+
+- Amandesai01 <amandesai01@gmail.com>
+
 ## v0.1.0
 
 [compare changes](https://github.com/unproducts/unmail/compare/v0.0.6...v0.1.0)
